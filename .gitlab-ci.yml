@@ -56,7 +56,6 @@ build:
       when: on_success
       allow_failure: true
   artifacts:
-    expire_in: 1 week
     paths:
       - out/
 
