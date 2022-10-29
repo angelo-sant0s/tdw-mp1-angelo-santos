@@ -40,7 +40,7 @@ prettier:
 test:
   stage: validation
   cache:
-   <<:*global_cache 
+   <<: *global_cache 
   script:
     -npm run test
 
