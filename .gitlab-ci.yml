@@ -6,6 +6,12 @@ stages:
   - build
   - deploy
 
+cache:
+  key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+  policy: pull-push 
+  paths:
+    - node_modules/
+
 installment:
   stage: install
   script:
@@ -30,3 +36,19 @@ build:
   stage: build
   script:
     -npm run build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == 'main'
+      when: on_success
+      allow_failure: false
+  artifacts:
+    paths:
+      - out/
+
+deploy:
+  stage: deploy
+  dependencies:
+    - build
+  script:
+    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod 
+
+
