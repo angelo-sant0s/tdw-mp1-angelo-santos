@@ -6,34 +6,47 @@ stages:
   - build
   - deploy
 
-cache:
-  key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-  policy: pull-push 
+cache: &global_cache
+  key:
+    files:
+      - package-lock.json
   paths:
+    - .npm/
     - node_modules/
+
 
 installment:
   stage: install
+  cache:
+   <<: *global_cache 
   script:
     - npm install
 
 lint:
   stage: validation
+  cache:
+   <<: *global_cache 
   script:
     -npm run lint
 
 prettier:
   stage: validation
+  cache:
+   <<: *global_cache 
   script: 
     -npm run prettier
 
 test:
   stage: validation
+  cache:
+   <<: *global_cache 
   script:
     -npm run test
 
 build:
   stage: build
+  cache:
+   <<: *global_cache 
   script:
     -npm run build
   rules:
