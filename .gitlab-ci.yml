@@ -18,21 +18,24 @@ cache: &global_cache
 installment:
   stage: install
   cache:
-   <<: *global_cache 
+   <<: *global_cache
+   policy: pull
   script:
     - npm install
 
 lint:
   stage: validation
   cache:
-   <<: *global_cache 
+   <<: *global_cache
+   policy: pull
   script:
     -npm run lint
 
 prettier:
   stage: validation
   cache:
-   <<: *global_cache 
+   <<: *global_cache
+   policy: pull
   script: 
     -npm run prettier
 
