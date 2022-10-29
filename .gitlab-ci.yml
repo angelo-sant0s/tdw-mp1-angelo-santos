@@ -6,28 +6,22 @@ stages:
   #- build
   #- deployment
 
-cache: &global_cache
-  key:
-    files:
-      - package-lock.json
-  paths:
-    - .npm/
-    - node_modules/
 
-installment:
+install:
   stage: installment
-  cache:
-   <<: *global_cache
+  artifacts:
+    paths:
+      - node_modules/
   script:
     - npm install
 
-lint:
+test:
   stage: validation
-  cache:
-   <<: *global_cache
-   policy: pull
+  artifacts:
+    paths:
+      - node_modules/
   script:
-    -npm run lint
+    -npm run test
 
 
 
