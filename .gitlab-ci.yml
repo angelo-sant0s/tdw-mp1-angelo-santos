@@ -57,8 +57,10 @@ build:
       when: on_success
       allow_failure: false
   artifacts:
+    expire_in: 1 week
     paths:
       - out/
+
 
 deploy:
   stage: deploy
