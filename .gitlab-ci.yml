@@ -11,14 +11,13 @@ cache: &global_cache
     files:
       - package-lock.json
   paths:
-    - npm/
+    - .npm/
     - node_modules/
 
 installment:
   stage: installment
   cache:
    <<: *global_cache
-   policy: pull
   script:
     - npm install
 
