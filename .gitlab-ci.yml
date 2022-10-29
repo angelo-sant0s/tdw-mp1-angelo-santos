@@ -11,6 +11,7 @@ cache: &global_cache
     files:
       - package-lock.json
   paths:
+    - npm/
     - node_modules/
 
 installment:
