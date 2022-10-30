@@ -17,6 +17,7 @@ install:
 
 test:
   stage: validation
+  image: node:latest
   artifacts:
     paths:
       - node_modules/
