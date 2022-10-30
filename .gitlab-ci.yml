@@ -6,22 +6,69 @@ stages:
   #- build
   #- deployment
 
+cache: &global_cache
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+    - node_modules/
 
-install:
+installment:
   stage: installment
-  artifacts:
-    paths:
-      - node_modules/
+  cache:
+   <<: *global_cache
   script:
     - npm install
 
+lint:
+  stage: validation
+  cache:
+   <<: *global_cache
+   policy: pull
+  script:
+    -npm run lint
+
+prettier:
+  stage: validation
+  cache:
+   <<: *global_cache
+   policy: pull
+  script: 
+    - npm run prettier
+
 test:
   stage: validation
-  artifacts:
-    paths:
-      - node_modules/
+  cache:
+   <<: *global_cache 
   script:
     - npm run test
+
+build:
+  stage: build
+  cache:
+   <<: *global_cache 
+  script:
+    - npm run build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == 'main'
+      when: on_success
+      allow_failure: true
+  artifacts:
+    paths:
+      - out/
+
+deployment:
+  stage: deployment
+  dependencies:
+    - build
+  script:
+    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod 
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: on_success
+      allow_failure: true
+  cache: []
 
 
 
