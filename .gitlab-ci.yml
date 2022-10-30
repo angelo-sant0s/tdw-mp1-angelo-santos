@@ -1,26 +1,71 @@
-build-job:
+image: node:latest
+
+stages:
+  - installment
+  - validation
+  - build
+  - deployment
+
+cache: &global_cache
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+    - node_modules/
+
+installment:
+  stage: installment
+  cache:
+   <<: *global_cache
+  script:
+    - npm install
+
+lint:
+  stage: validation
+  cache:
+   <<: *global_cache
+   policy: pull
+  script:
+    - npm run lint
+
+prettier:
+  stage: validation
+  cache:
+   <<: *global_cache
+   policy: pull
+  script: 
+    - npm run prettier
+
+test:
+  stage: validation
+  cache:
+   <<: *global_cache 
+  script:
+    - npm run test
+
+build:
   stage: build
+  cache:
+   <<: *global_cache 
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - npm run build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == 'main'
+      when: on_success
+      allow_failure: true
+  artifacts:
+    paths:
+      - out/
 
-test-job1:
-  stage: test
+deployment:
+  stage: deployment
+  dependencies:
+    - build
   script:
-    - echo "This job tests something"
-
-test-job2:
-  stage: test
-  script:
-    - echo "This job tests something, but takes more time than test-job1."
-    - echo "After the echo commands complete, it runs the sleep command for 20 seconds"
-    - echo "which simulates a test that runs 20 seconds longer than test-job1"
-    - sleep 20
-
-deploy-prod:
-  stage: deploy
-  script:
-    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
-  environment: production
-
-default:
-  image: ruby:2.7.5
+    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod 
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: on_success
+      allow_failure: true
+  cache: []
