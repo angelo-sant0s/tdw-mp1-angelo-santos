@@ -27,7 +27,7 @@ lint:
    <<: *global_cache
    policy: pull
   script:
-    -npm run lint
+    - npm run lint
 
 prettier:
   stage: validation
