@@ -3,8 +3,8 @@ image: node:latest
 stages:
   - installment
   - validation
-  #- build
-  #- deployment
+  - build
+  - deployment
 
 cache: &global_cache
   key:
