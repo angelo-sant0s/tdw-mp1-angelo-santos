@@ -44,7 +44,7 @@ test:
   script:
     - npm run test
 
-building:
+build:
   stage: build
   cache:
    <<: *global_cache 
