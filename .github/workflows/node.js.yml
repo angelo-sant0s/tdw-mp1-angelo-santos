@@ -32,7 +32,7 @@ jobs:
             cache: 'npm'
             cache-dependency-path: package-lock.json
       - run: |
-          - npm ci
+          - npm install
           - npm run lint
   test:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
             cache: 'npm'
             cache-dependency-path: package-lock.json
       - run: |
-          - npm ci 
+          - npm install 
           - npm run test
   prettier:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
             cache: 'npm'
             cache-dependency-path: package-lock.json
       - run: |
-          - npm ci
+          - npm install
           - npm run prettier
   build:
     runs-on: ubuntu-latest
