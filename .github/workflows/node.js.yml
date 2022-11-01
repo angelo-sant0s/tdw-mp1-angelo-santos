@@ -10,16 +10,25 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14.x'
-          
-      - name: Install dependencies
-        run: npm install
-        
-      - name: Validate Code
-        run: npm run lint
+      - uses: actions/checkout@v2
+      - run: |
+           npm install
+           npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+            npm install
+            npm run test
+  prettier:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+            npm install
+            npm run prettier
