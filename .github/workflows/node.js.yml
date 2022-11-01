@@ -18,7 +18,6 @@ jobs:
             node-version: 18
             cache: 'npm'
             cache-dependency-path: package-lock.json
-        - run: npm ci    
   lint:
     runs-on: ubuntu-latest
     needs: [install]
@@ -29,7 +28,9 @@ jobs:
             node-version: 18
             cache: 'npm'
             cache-dependency-path: package-lock.json
-      - run: npm run lint
+      - run: |
+           npm ci
+           npm run lint
   test:
     runs-on: ubuntu-latest
     needs: [install]
@@ -40,7 +41,9 @@ jobs:
             node-version: 18
             cache: 'npm'
             cache-dependency-path: package-lock.json
-      - run: npm run test
+      - run: |
+           npm ci 
+           npm run test
   prettier:
     runs-on: ubuntu-latest
     needs: [install]
@@ -51,19 +54,20 @@ jobs:
             node-version: 18
             cache: 'npm'
             cache-dependency-path: package-lock.json
-      - run: npm run prettier
-      
+      - run: |
+           npm ci
+           npm run prettier
+  
+  
   build-deploy:   
     runs-on: ubuntu-latest
     needs: [lint,test,prettier]
     steps: 
       - name: Building...
-        uses: actions/setup-node@v3
-        with:
-            node-version: 18
-            cache: 'npm'
-            cache-dependency-path: package-lock.json
-      - run: npm run build
+        uses: actions/checkout@v3 
+      - run: |
+            npm ci
+            npm run build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
